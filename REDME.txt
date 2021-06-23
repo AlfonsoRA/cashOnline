@@ -1,0 +1,192 @@
+﻿
+# Challenge Cash Online 
+
+---
+
+CashOnline es un proyecto Web desarrollado con el core de spring, se utiliza SoftDelete para el borrado de entidades, Lombook para la generacion de codigo en las entidades, se utiliza el modelMapper para el pase de informacion de la entidad al DTO y viceversa, se utiliza el patron de diseño DTO para el envio de informacion en los endPoints, se utiliza el componente de Paginacion para crear la estructura de paginacion.
+
+----
+
+
+# Tecnologías 
+
+ * Java11 
+ * Git
+ * Maven
+ * Lombok
+ * Spring-boot
+ * Spring-Data
+ * Hibernate
+ * MySql
+ * API Rest
+
+
+-------
+
+# Instalacion
+
+* Creacion de Base de datos
+
+	* Creacion de tabla
+
+		CREATE TABLE `loans` (
+			`id` bigint(20) NOT NULL AUTO_INCREMENT,
+ 			`total` double NOT NULL,
+  			`user_id` bigint(20) DEFAULT NULL,
+  			`deleted` tinyint(1) DEFAULT NULL,
+  			`create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  			`update_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  			PRIMARY KEY (`id`),
+  			KEY `FKloansuser` (`user_id`),
+  			CONSTRAINT `FKloansuser` FOREIGN KEY (`user_id`) REFERENCES `loans` (`id`)
+		) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+
+		CREATE TABLE `users` (
+			`id` bigint(20) NOT NULL AUTO_INCREMENT,
+  			`email` varchar(50) NOT NULL,
+  			`first_name` varchar(50) DEFAULT NULL,
+  			`last_name` varchar(50) DEFAULT NULL,
+  			`deleted` tinyint(1) DEFAULT NULL,
+  			`create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  			`update_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  			PRIMARY KEY (`id`)
+		) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-------
+
+# Accesos a los servicios
+
+Usuarios:
+	* Enponint que guarda datos del usuario (no icluye loans)
+		localhost:8080/users/
+
+		* Parametros del path
+		 	Parametro: 		user
+		 	Tipo: 			User
+		 	Descripcion: 		Datos del Usuario ingresados
+
+		* Contenido:
+			email: 
+				Descripcion: Email del usuario
+				tipo: String
+			firstName:
+				Descripcion: Nombre del  usuario
+				tipo: String
+			lastName: 
+				Descripcion: Apellido del usuario
+				tipo: String
+
+
+	* EndPoint que consulta los usuarios de  la base de datos por ID
+		localhost:8080/users/{id}
+
+		* Contenido:
+
+			email: 
+				Descripcion: Email del usuario
+				tipo: String
+			firstName:
+				Descripcion: Nombre del  usuario
+				tipo: String
+			lastName: 
+				Descripcion: Apellido del usuario
+				tipo: String
+			Loans:
+				Descripcion: Lista de Loans
+				tipo: List<Loan>
+
+	* EndPoint que elimina los usuarios de la base de datos por ID (incluyendo los loans)	-------- Cabe destacar que la eliminacion es un borrado logico
+		localhost:8080/users/delete/{id}
+
+		* Parametros del path
+		 	Parametro: 		id
+		 	Tipo: 			Long
+		 	Descripcion: 		Identificador del Usuario que se desea eliminar
+
+Loans:
+
+	* Enponint que guarda datos del Loan 
+		localhost:8080/loans
+
+		* Parametros del path
+		 	Parametro: 		loan
+		 	Tipo: 			Loan
+		 	Descripcion: 		Datos del Loan ingresados
+
+		* Contenido:
+			id: 
+				Descripcion: Identificador del loan
+				tipo: Long
+			total:
+				Descripcion: Total del loan
+				tipo: Double
+			userId: 
+				Descripcion: Identificador del usuario
+				tipo: Long
+
+	* EndPoint que consulta los loans de la base de datos con paginacion
+		localhost:8080/loans?page=1&size=2
+
+		* Parametros del path
+		 	Parametro: 		size
+		 	Tipo: 			Integer
+		 	Descripcion: 		Cantidad ingresada de cuantos loans habra por pagina 
+
+			Parametro: 		page
+		 	Tipo: 			Integer
+		 	Descripcion: 		Pagina ingresada para saber en que pagina te quieres ubicar
+
+		* Contenido:
+			items:
+				loans: 
+					Descripcion: Lista de loans
+					tipo: List<Loan>
+				page:
+					Descripcion: Cantidad de la Pagina donde se quiere ubicar
+					tipo: Integer
+				size:
+					Descripcion: Cantidad de loan de la pagina donde se esta ubicado
+					tipo: Integer
+				total:
+					Descripcion: Cantidad total de loans en todas las pagina
+					tipo: Integer
+
+	* EndPoint que consulta los loans de la base de datos con paginacion
+		localhost:8080/loansId?page=0&size=5&id=2
+
+		* Parametros del path
+		 	Parametro: 		size
+		 	Tipo: 			Integer
+		 	Descripcion: 		Cantidad ingresada de cuantos loans habra por pagina 
+
+			Parametro: 		page
+		 	Tipo: 			Integer
+		 	Descripcion: 		Pagina ingresada para saber en que pagina te quieres ubicar
+
+			Parametro: 		id
+		 	Tipo: 			Long
+		 	Descripcion: 		Identificador del usuario del que se quiere obtener los loans
+
+		* Contenido:
+			items:
+				loans: 
+					Descripcion: Lista de loans filtrada por el id del usuario ingresado
+					tipo: List<Loan>
+				page:
+					Descripcion: Cantidad de la Pagina donde se quiere ubicar
+					tipo: Integer
+				size:
+					Descripcion: Cantidad de loan de la pagina donde se esta ubicado
+					tipo: Integer
+				total:
+					Descripcion: Cantidad total de loans en todas las pagina
+					tipo: Integer
+			
+
+
+
+
+
+
+
+

@@ -28,6 +28,7 @@ public class UserController {
         UserDTO userDTO = userService.findById(id);
         return new ResponseEntity(userDTO, HttpStatus.OK);
     }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<User> deleteId(@PathVariable  Long id){
         userService.deleteById(id);

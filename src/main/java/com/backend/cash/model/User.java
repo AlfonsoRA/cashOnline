@@ -3,6 +3,7 @@ package com.backend.cash.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
-@Data @NoArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET deleted = true WHERE id = ?")
